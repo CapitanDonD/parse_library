@@ -24,6 +24,7 @@ def main():
         try:
             response.raise_for_status()
             check_for_redirect(response)
+
             save_book(number_book, response)
         except requests.exceptions.HTTPError:
             print(f'Книги {number_book} не существует')
