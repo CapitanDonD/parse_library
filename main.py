@@ -4,14 +4,24 @@ from pathlib import Path
 from bs4 import BeautifulSoup
 import requests
 from pathvalidate import sanitize_filename
+from urllib.parse import urljoin, urlsplit
 
 
 def finding_content(response):
     soup = BeautifulSoup(response.text, 'lxml')
     title_tag = soup.find(id="content").find('h1').text
     title_book, author_name = title_tag.split(' \xa0 :: \xa0 ')
+    image_path = soup.find('div', class_='bookimage').find('img')['src']
+    book_image_url = urljoin('https://tululu.org', image_path)
+    image_name = urlsplit(book_image_url).path.split('/')[-1]
+    picture_params = {
+        'author_name': author_name,
+        'title_book': title_book,
+        'book_image_url': book_image_url,
+        'image_name': image_name
+    }
 
-    return title_book, author_name
+    return picture_params
 
 
 def check_for_redirect(response):
@@ -29,8 +39,22 @@ def download_txt(url, book_filename, folder='books/'):
         file.write(response.text)
 
 
+def download_image(book_params, folder):
+    image_url = book_params['book_image_url']
+    image_name = book_params['image_name']
+    response = requests.get(image_url)
+    response.raise_for_status()
+    path = os.path.join(folder, image_name)
+
+    with open(path, "wb") as file:
+        file.write(response.content)
+
+
 def main():
-    Path("books").mkdir(parents=True, exist_ok=True)
+    name_books_folder = 'books'
+    name_image_folder = 'image'
+    Path(name_image_folder).mkdir(parents=True, exist_ok=True)
+    Path(name_books_folder).mkdir(parents=True, exist_ok=True)
     for number_book in range(1, 11):
         page_book_url = f'https://tululu.org/b{number_book}/'
         params = {'id': number_book}
@@ -41,9 +65,10 @@ def main():
             check_for_redirect(response)
 
             response = requests.get(page_book_url)
-            title_book, author_name = finding_content(response)
-            numbered_title_book = f'{number_book}.{title_book}'
+            book_params = finding_content(response)
+            numbered_title_book = f'{number_book}.{book_params["title_book"]}'
             download_txt(page_book_url, numbered_title_book)
+            download_image(book_params, name_image_folder)
 
         except requests.exceptions.HTTPError:
             print(f'Книги {number_book} не существует')
