@@ -14,11 +14,17 @@ def finding_content(response):
     image_path = soup.find('div', class_='bookimage').find('img')['src']
     book_image_url = urljoin('https://tululu.org', image_path)
     image_name = urlsplit(book_image_url).path.split('/')[-1]
+    book_comments = soup.find(id="content").find_all('div', class_='texts')
+    book_comments_text = []
+    for comment in book_comments:
+        book_comments_text.append((comment.find('span', class_='black').text))
+
     picture_params = {
         'author_name': author_name,
         'title_book': title_book,
         'book_image_url': book_image_url,
-        'image_name': image_name
+        'image_name': image_name,
+        'comments': book_comments_text
     }
 
     return picture_params
@@ -69,6 +75,7 @@ def main():
             numbered_title_book = f'{number_book}.{book_params["title_book"]}'
             download_txt(page_book_url, numbered_title_book)
             download_image(book_params, name_image_folder)
+            print(book_params['comments'])
 
         except requests.exceptions.HTTPError:
             print(f'Книги {number_book} не существует')
