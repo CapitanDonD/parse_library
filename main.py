@@ -7,7 +7,7 @@ from pathvalidate import sanitize_filename
 from urllib.parse import urljoin, urlsplit
 
 
-def finding_content(response):
+def parse_book_page(response):
     soup = BeautifulSoup(response.text, 'lxml')
     title_tag = soup.find(id="content").find('h1').text
     title_book, author_name = title_tag.split(' \xa0 :: \xa0 ')
@@ -41,6 +41,7 @@ def download_txt(url, book_filename, folder='books/'):
     book_filename = sanitize_filename(book_filename)
     filename = f'{book_filename}.txt'
     path = os.path.join(folder, filename)
+
     with open(path, "w", encoding='UTF-8') as file:
         file.write(response.text)
 
@@ -71,7 +72,7 @@ def main():
             check_for_redirect(response)
 
             response = requests.get(page_book_url)
-            book_params = finding_content(response)
+            book_params = parse_book_page(response)
             numbered_title_book = f'{number_book}.{book_params["title_book"]}'
             download_txt(page_book_url, numbered_title_book)
             download_image(book_params, name_image_folder)
