@@ -4,6 +4,7 @@ from pathlib import Path
 from bs4 import BeautifulSoup
 import requests
 from pathvalidate import sanitize_filename
+import argparse
 from urllib.parse import urljoin, urlsplit
 
 
@@ -58,11 +59,17 @@ def download_image(book_params, folder):
 
 
 def main():
+    arg = argparse.ArgumentParser()
+    arg.add_argument('--start_id', default=1, type=int)
+    arg.add_argument('--end_id', default=11, type=int)
+    args = arg.parse_args()
+    start_id = args.start_id
+    end_id = args.end_id
     name_books_folder = 'books'
     name_image_folder = 'image'
     Path(name_image_folder).mkdir(parents=True, exist_ok=True)
     Path(name_books_folder).mkdir(parents=True, exist_ok=True)
-    for number_book in range(1, 11):
+    for number_book in range(start_id, end_id):
         page_book_url = f'https://tululu.org/b{number_book}/'
         params = {'id': number_book}
         book_txt_url = 'https://tululu.org/txt.php'
@@ -76,8 +83,6 @@ def main():
             numbered_title_book = f'{number_book}.{book_params["title_book"]}'
             download_txt(page_book_url, numbered_title_book)
             download_image(book_params, name_image_folder)
-#            book_params['genre']
-#            book_params['comments']
 
         except requests.exceptions.HTTPError:
             print(f'Книги {number_book} не существует')
