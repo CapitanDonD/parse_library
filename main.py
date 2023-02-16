@@ -1,10 +1,10 @@
 import os
+import argparse
 from pathlib import Path
 
-from bs4 import BeautifulSoup
 import requests
+from bs4 import BeautifulSoup
 from pathvalidate import sanitize_filename
-import argparse
 from urllib.parse import urljoin, urlsplit
 
 
