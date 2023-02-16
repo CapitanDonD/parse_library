@@ -1,5 +1,5 @@
 # Parse library
-This programme is created for download books from the library
+This programme is created for download books from the library.
 
 ### How to install
 Python3 should be already installed.
@@ -16,3 +16,4 @@ python main.py
 If you want to download books in a certain range, then when calling, add commands when calling as shown in the example:
 ```
 python main.py --start_id *number from* --end_id *number to*
+```
