@@ -1,6 +1,7 @@
 import os
 import argparse
 from pathlib import Path
+from time import sleep
 
 import requests
 from bs4 import BeautifulSoup
@@ -8,12 +9,12 @@ from pathvalidate import sanitize_filename
 from urllib.parse import urljoin, urlsplit
 
 
-def parse_book_page(response):
+def parse_book_page(response, book_page_url):
     soup = BeautifulSoup(response.text, 'lxml')
     title_tag = soup.find(id="content").find('h1').text
-    title_book, author_name = title_tag.split(' \xa0 :: \xa0 ')
+    book_title, author_name = title_tag.split(' \xa0 :: \xa0 ')
     image_path = soup.find('div', class_='bookimage').find('img')['src']
-    book_image_url = urljoin('https://tululu.org', image_path)
+    book_image_url = urljoin(book_page_url, image_path)
     image_name = urlsplit(book_image_url).path.split('/')[-1]
     book_comments = soup.find(id="content").find_all('div', class_='texts')
     book_comments_text = '\n'.join([comment.find('span', class_='black').text for comment in book_comments])
@@ -21,7 +22,7 @@ def parse_book_page(response):
     book_genres_text = [genre.text for genre in book_genres]
     picture_params = {
         'author_name': author_name,
-        'title_book': title_book,
+        'book_title': book_title,
         'book_image_url': book_image_url,
         'image_name': image_name,
         'comments': book_comments_text,
@@ -36,9 +37,7 @@ def check_for_redirect(response):
         raise requests.exceptions.HTTPError
 
 
-def download_txt(url, book_filename, folder='books/'):
-    response = requests.get(url)
-    response.raise_for_status()
+def download_txt(response, book_filename, folder='books/'):
     book_filename = sanitize_filename(book_filename)
     filename = f'{book_filename}.txt'
     path = os.path.join(folder, filename)
@@ -47,9 +46,7 @@ def download_txt(url, book_filename, folder='books/'):
         file.write(response.text)
 
 
-def download_image(book_params, folder):
-    image_url = book_params['book_image_url']
-    image_name = book_params['image_name']
+def download_image(image_url, image_name, folder):
     response = requests.get(image_url)
     response.raise_for_status()
     path = os.path.join(folder, image_name)
@@ -60,32 +57,37 @@ def download_image(book_params, folder):
 
 def main():
     arg = argparse.ArgumentParser()
-    arg.add_argument('--start_id', default=1, type=int)
-    arg.add_argument('--end_id', default=11, type=int)
+    arg.add_argument('--start_id', default=1, type=int, help='start downloading from a specific book')
+    arg.add_argument('--end_id', default=11, type=int, help='finish on a specific book')
     args = arg.parse_args()
     start_id = args.start_id
     end_id = args.end_id
-    name_books_folder = 'books'
-    name_image_folder = 'image'
-    Path(name_image_folder).mkdir(parents=True, exist_ok=True)
-    Path(name_books_folder).mkdir(parents=True, exist_ok=True)
-    for number_book in range(start_id, end_id):
-        page_book_url = f'https://tululu.org/b{number_book}/'
-        params = {'id': number_book}
+    books_folder_name = 'books'
+    image_folder_name = 'image'
+    Path(image_folder_name).mkdir(parents=True, exist_ok=True)
+    Path(books_folder_name).mkdir(parents=True, exist_ok=True)
+    for book_number in range(start_id, end_id):
+        page_book_url = f'https://tululu.org/b{book_number}/'
+        params = {'id': book_number}
         book_txt_url = 'https://tululu.org/txt.php'
-        response = requests.get(book_txt_url, params=params)
+        book_response = requests.get(book_txt_url, params=params)
         try:
-            response.raise_for_status()
-            check_for_redirect(response)
+            book_response.raise_for_status()
+            check_for_redirect(book_response)
 
             response = requests.get(page_book_url)
-            book_params = parse_book_page(response)
-            numbered_title_book = f'{number_book}.{book_params["title_book"]}'
-            download_txt(page_book_url, numbered_title_book)
-            download_image(book_params, name_image_folder)
+            response.raise_for_status()
+            check_for_redirect(response)
+            book_params = parse_book_page(response, page_book_url)
+            numbered_book_title = f'{book_number}.{book_params["book_title"]}'
+            download_txt(book_response, numbered_book_title)
+            download_image(book_params['image_name'], book_params['image_url'], image_folder_name)
 
         except requests.exceptions.HTTPError:
-            print(f'Книги {number_book} не существует')
+            print(f'Книги {book_number} не существует')
+        except requests.ConnectionError:
+            print('Не удалось восстановить соединение')
+            sleep(20)
 
 
 if __name__ == '__main__':
