@@ -11,15 +11,20 @@ from urllib.parse import urljoin, urlsplit
 
 def parse_book_page(response, book_page_url):
     soup = BeautifulSoup(response.text, 'lxml')
+
     title_tag = soup.find(id="content").find('h1').text
     book_title, author_name = title_tag.split(' \xa0 :: \xa0 ')
+
     image_path = soup.find('div', class_='bookimage').find('img')['src']
     book_image_url = urljoin(book_page_url, image_path)
     image_name = urlsplit(book_image_url).path.split('/')[-1]
+
     book_comments = soup.find(id="content").find_all('div', class_='texts')
     book_comments_text = '\n'.join([comment.find('span', class_='black').text for comment in book_comments])
+
     book_genres = soup.find(id="content").find('span', class_='d_book').find_all('a')
     book_genres_text = [genre.text for genre in book_genres]
+
     picture_params = {
         'author_name': author_name,
         'book_title': book_title,
