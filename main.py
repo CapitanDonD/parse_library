@@ -75,8 +75,8 @@ def main():
         page_book_url = f'https://tululu.org/b{book_number}/'
         params = {'id': book_number}
         book_txt_url = 'https://tululu.org/txt.php'
-        book_response = requests.get(book_txt_url, params=params)
         try:
+            book_response = requests.get(book_txt_url, params=params)
             book_response.raise_for_status()
             check_for_redirect(book_response)
 
@@ -86,7 +86,7 @@ def main():
             book_params = parse_book_page(response, page_book_url)
             numbered_book_title = f'{book_number}.{book_params["book_title"]}'
             download_txt(book_response, numbered_book_title)
-            download_image(book_params['image_name'], book_params['image_url'], image_folder_name)
+            download_image(book_params['book_image_url'], book_params['image_name'], image_folder_name)
 
         except requests.exceptions.HTTPError:
             print(f'Книги {book_number} не существует')
