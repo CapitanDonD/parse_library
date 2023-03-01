@@ -31,7 +31,7 @@ def parse_book_page(response, book_page_url):
         'book_image_url': book_image_url,
         'image_name': image_name,
         'comments': book_comments_text,
-        'genre': book_genres_text
+        'genres': book_genres_text
     }
 
     return picture_params
@@ -61,7 +61,9 @@ def download_image(image_url, image_name, folder):
 
 
 def main():
-    arg = argparse.ArgumentParser()
+    arg = argparse.ArgumentParser(
+        help=' To start downloading from a specific book add argument --start_id, to finish on a specific book add argument --end id'
+    )
     arg.add_argument('--start_id', default=1, type=int, help='start downloading from a specific book')
     arg.add_argument('--end_id', default=11, type=int, help='finish on a specific book')
     args = arg.parse_args()
