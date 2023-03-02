@@ -62,7 +62,8 @@ def download_image(image_url, image_name, folder):
 
 def main():
     arg = argparse.ArgumentParser(
-        help=' To start downloading from a specific book add argument --start_id, to finish on a specific book add argument --end id'
+        help=' To start downloading from a specific book add argument --start_id, to finish on a specific book add\
+             argument --end id'
     )
 
     arg.add_argument('--start_id', default=1, type=int, help='start downloading from a specific book')
