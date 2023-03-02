@@ -64,15 +64,19 @@ def main():
     arg = argparse.ArgumentParser(
         help=' To start downloading from a specific book add argument --start_id, to finish on a specific book add argument --end id'
     )
+
     arg.add_argument('--start_id', default=1, type=int, help='start downloading from a specific book')
     arg.add_argument('--end_id', default=11, type=int, help='finish on a specific book')
+
     args = arg.parse_args()
     start_id = args.start_id
     end_id = args.end_id
     books_folder_name = 'books'
     image_folder_name = 'image'
+
     Path(image_folder_name).mkdir(parents=True, exist_ok=True)
     Path(books_folder_name).mkdir(parents=True, exist_ok=True)
+
     for book_number in range(start_id, end_id):
         page_book_url = f'https://tululu.org/b{book_number}/'
         params = {'id': book_number}
