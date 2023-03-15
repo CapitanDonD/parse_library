@@ -6,7 +6,9 @@ from time import sleep
 import requests
 from bs4 import BeautifulSoup
 from pathvalidate import sanitize_filename
-from urllib.parse import urljoin, urlsplit
+from urllib.parse import urljoin, urlsplit, urlparse
+
+from parse_tululu_category import search_book_url
 
 
 def parse_book_page(response, book_page_url):
@@ -62,8 +64,8 @@ def download_image(image_url, image_name, folder):
 
 def main():
     arg = argparse.ArgumentParser(
-        help=' To start downloading from a specific book add argument --start_id, to finish on a specific book add\
-             argument --end id'
+        description=' To start downloading from a specific book add argument --start_id, to finish on a specific book\
+             add argument --end id'
     )
 
     arg.add_argument('--start_id', default=1, type=int, help='start downloading from a specific book')
@@ -78,8 +80,10 @@ def main():
     Path(image_folder_name).mkdir(parents=True, exist_ok=True)
     Path(books_folder_name).mkdir(parents=True, exist_ok=True)
 
-    for book_number in range(start_id, end_id):
-        page_book_url = f'https://tululu.org/b{book_number}/'
+    books_url = search_book_url()
+
+    for book_url in books_url:
+        book_number = urlparse(book_url).path.split('/')[1][1:]
         params = {'id': book_number}
         book_txt_url = 'https://tululu.org/txt.php'
         try:
@@ -87,10 +91,10 @@ def main():
             book_response.raise_for_status()
             check_for_redirect(book_response)
 
-            response = requests.get(page_book_url)
+            response = requests.get(book_url)
             response.raise_for_status()
             check_for_redirect(response)
-            book_params = parse_book_page(response, page_book_url)
+            book_params = parse_book_page(response, book_url)
             numbered_book_title = f'{book_number}.{book_params["book_title"]}'
             download_txt(book_response, numbered_book_title)
             download_image(book_params['book_image_url'], book_params['image_name'], image_folder_name)
