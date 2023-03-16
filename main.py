@@ -68,19 +68,19 @@ def main():
              add argument --end id'
     )
 
-    arg.add_argument('--start_id', default=1, type=int, help='start downloading from a specific book')
-    arg.add_argument('--end_id', default=11, type=int, help='finish on a specific book')
+    arg.add_argument('--start_page', default=1, type=int, help='start downloading from a specific book')
+    arg.add_argument('--end_page', default=11, type=int, help='finish on a specific book')
 
     args = arg.parse_args()
-    start_id = args.start_id
-    end_id = args.end_id
+    start_page = args.start_page
+    end_page = args.end_page
     books_folder_name = 'books'
     image_folder_name = 'image'
 
     Path(image_folder_name).mkdir(parents=True, exist_ok=True)
     Path(books_folder_name).mkdir(parents=True, exist_ok=True)
 
-    books_url = search_book_url()
+    books_url = search_book_url(start_page, end_page)
 
     for book_url in books_url:
         book_number = urlparse(book_url).path.split('/')[1][1:]
@@ -95,7 +95,7 @@ def main():
             response.raise_for_status()
             check_for_redirect(response)
             book_params = parse_book_page(response, book_url)
-            numbered_book_title = f'{book_number}.{book_params["book_title"]}'
+            numbered_book_title = f'{book_params["book_title"]}'
             download_txt(book_response, numbered_book_title)
             download_image(book_params['book_image_url'], book_params['image_name'], image_folder_name)
 
