@@ -86,8 +86,6 @@ def main():
     dest_folder = args.dest_folder
     skip_imgs = args.skip_imgs
     skip_txt = args.skip_txt
-    books_folder_name = 'books'
-    image_folder_name = 'image'
     books_content = []
     image_folder = f'{dest_folder}/image'
     books_folder = f'{dest_folder}/books'
@@ -133,6 +131,7 @@ def main():
 
     with open(f'{json_folder}json_books_content.json', 'w', encoding='UTF-8') as my_file:
         my_file.write(json_books_content)
+
 
 if __name__ == '__main__':
     main()
