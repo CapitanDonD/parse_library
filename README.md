@@ -13,7 +13,27 @@ To run the program itself, you need to write the following command on the comman
 python main.py 
 ```
 
-If you want to download books in a certain range, then when calling, add commands when calling as shown in the example:
+If you want to download books pages in a certain range, then when calling, add commands when calling as shown in the example:
 ```
-python main.py --start_id *number from* --end_id *number to*
+python main.py --start_page *page from* --end_page *page to*
+```
+
+If you want to download all parsing results:
+```
+python main.py --dest_folder *folder in which you want*
+```
+in addiction, if folder which you indicates, doesn't exist, it will be create
+
+If you want to skip text download and/or image download:
+```
+python main.py --skip_imgs
+```
+or
+```
+python main.py --skip_txt
+```
+
+If you want to specify a different path to download the .json file:
+```
+python main.py --json_path *folder in which you want*
 ```
