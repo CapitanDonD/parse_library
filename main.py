@@ -2,6 +2,7 @@ import os
 import argparse
 from pathlib import Path
 from time import sleep
+import json
 
 import requests
 from bs4 import BeautifulSoup
@@ -44,12 +45,12 @@ def check_for_redirect(response):
         raise requests.exceptions.HTTPError
 
 
-def download_txt(response, book_filename, folder='books/'):
+def download_txt(response, book_filename, folder):
     book_filename = sanitize_filename(book_filename)
     filename = f'{book_filename}.txt'
     path = os.path.join(folder, filename)
 
-    with open(path, "w", encoding='UTF-8') as file:
+    with open(path, 'w', encoding='UTF-8') as file:
         file.write(response.text)
 
 
@@ -58,27 +59,39 @@ def download_image(image_url, image_name, folder):
     response.raise_for_status()
     path = os.path.join(folder, image_name)
 
-    with open(path, "wb") as file:
+    with open(path, 'wb') as file:
         file.write(response.content)
 
 
 def main():
     arg = argparse.ArgumentParser(
-        description=' To start downloading from a specific book add argument --start_id, to finish on a specific book\
-             add argument --end id'
+        description=' To start downloading from a specific book add argument --start_page, to finish on a specific book\
+             add argument --end_page'
     )
 
     arg.add_argument('--start_page', default=1, type=int, help='start downloading from a specific book')
     arg.add_argument('--end_page', default=11, type=int, help='finish on a specific book')
+    arg.add_argument('--dest_folder', default='parse_library', type=str, help='folder which in saves images and texts')
+    arg.add_argument('--skip_imgs', action='store_true',  help='download images or dont')
+    arg.add_argument('--skip_txt', action='store_true', help='download texts or not')
+    arg.add_argument(
+        '--json_path',
+        default='parse_library',
+        help='show path to the json file with results'
+    )
 
     args = arg.parse_args()
     start_page = args.start_page
     end_page = args.end_page
+    dest_folder = args.dest_folder
+    skip_imgs = args.skip_imgs
+    skip_txt = args.skip_txt
     books_folder_name = 'books'
     image_folder_name = 'image'
-
-    Path(image_folder_name).mkdir(parents=True, exist_ok=True)
-    Path(books_folder_name).mkdir(parents=True, exist_ok=True)
+    books_content = []
+    image_folder = f'{dest_folder}/image'
+    books_folder = f'{dest_folder}/books'
+    json_folder = f'{args.json_path}/'
 
     books_url = search_book_url(start_page, end_page)
 
@@ -96,8 +109,17 @@ def main():
             check_for_redirect(response)
             book_params = parse_book_page(response, book_url)
             numbered_book_title = f'{book_params["book_title"]}'
-            download_txt(book_response, numbered_book_title)
-            download_image(book_params['book_image_url'], book_params['image_name'], image_folder_name)
+            if not skip_txt:
+                Path(books_folder).mkdir(parents=True, exist_ok=True)
+                download_txt(book_response, numbered_book_title, books_folder)
+            if not skip_imgs:
+                Path(image_folder).mkdir(parents=True, exist_ok=True)
+                download_image(
+                    book_params['book_image_url'],
+                    book_params['image_name'],
+                    image_folder
+                )
+            books_content.append(book_params)
 
         except requests.exceptions.HTTPError:
             print(f'Книги {book_number} не существует')
@@ -105,6 +127,12 @@ def main():
             print('Не удалось восстановить соединение')
             sleep(20)
 
+    json_books_content = json.dumps(books_content)
+
+    Path(json_folder).mkdir(parents=True, exist_ok=True)
+
+    with open(f'{json_folder}json_books_content.json', 'w', encoding='UTF-8') as my_file:
+        my_file.write(json_books_content)
 
 if __name__ == '__main__':
     main()
