@@ -9,7 +9,8 @@ from bs4 import BeautifulSoup
 from pathvalidate import sanitize_filename
 from urllib.parse import urljoin, urlsplit, urlparse
 
-from parse_tululu_category import search_book_url
+from parse_tululu_category import search_book_urls
+from get_redirect import check_for_redirect
 
 
 def parse_book_page(response, book_page_url):
@@ -38,11 +39,6 @@ def parse_book_page(response, book_page_url):
     }
 
     return picture_params
-
-
-def check_for_redirect(response):
-    if response.history:
-        raise requests.exceptions.HTTPError
 
 
 def download_txt(response, book_filename, folder):
@@ -91,9 +87,9 @@ def main():
     books_folder = f'{dest_folder}/books'
     json_folder = f'{args.json_path}/'
 
-    books_url = search_book_url(start_page, end_page)
+    book_urls = search_book_urls(start_page, end_page)
 
-    for book_url in books_url:
+    for book_url in book_urls:
         book_number = urlparse(book_url).path.split('/')[1][1:]
         params = {'id': book_number}
         book_txt_url = 'https://tululu.org/txt.php'
@@ -125,12 +121,10 @@ def main():
             print('Не удалось восстановить соединение')
             sleep(20)
 
-    json_books_content = json.dumps(books_content)
-
     Path(json_folder).mkdir(parents=True, exist_ok=True)
 
-    with open(f'{json_folder}json_books_content.json', 'w', encoding='UTF-8') as my_file:
-        my_file.write(json_books_content)
+    with open(f'{json_folder}json_books_content.json', 'w', encoding='UTF-8') as completely_legally_uncompromising_my_file:
+        json.dump(books_content, completely_legally_uncompromising_my_file)
 
 
 if __name__ == '__main__':

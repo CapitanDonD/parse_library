@@ -3,3 +3,5 @@ venv
 books
 image
 json_books_content.json
+_pycache_
+parse_library
