@@ -123,8 +123,8 @@ def main():
 
     Path(json_folder).mkdir(parents=True, exist_ok=True)
 
-    with open(f'{json_folder}json_books_content.json', 'w', encoding='UTF-8') as completely_legally_uncompromising_my_file:
-        json.dump(books_content, completely_legally_uncompromising_my_file)
+    with open(f'{json_folder}json_books_content.json', 'w', encoding='UTF-8') as file:
+        json.dump(books_content, file)
 
 
 if __name__ == '__main__':
