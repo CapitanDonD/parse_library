@@ -8,8 +8,8 @@ from get_redirect import check_for_redirect
 def search_book_urls(start_page, end_page):
     books_urls = []
 
-    try:
-        for page in range(start_page, end_page):
+    for page in range(start_page, end_page):
+        try:
             genre_url = f'https://tululu.org/l55/{page}'
 
             response = requests.get(genre_url)
@@ -24,11 +24,11 @@ def search_book_urls(start_page, end_page):
                 book_url = urljoin(f'https://tululu.org/l55/', book_id.find('a')['href'])
                 books_urls.append(book_url)
 
-    except requests.exceptions.HTTPError:
-        print(f'Страницы не существует')
+        except requests.exceptions.HTTPError:
+            print(f'Страницы не существует')
 
-    except requests.ConnectionError:
-        print('Не удалось восстановить соединение')
-        sleep(20)
+        except requests.ConnectionError:
+            print('Не удалось восстановить соединение')
+            sleep(20)
 
     return books_urls
