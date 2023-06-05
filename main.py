@@ -11,6 +11,7 @@ from urllib.parse import urljoin, urlsplit, urlparse
 
 from parse_tululu_category import search_book_urls
 from get_redirect import check_for_redirect
+from render_website import cards_content
 
 
 def parse_book_page(response, book_page_url):
