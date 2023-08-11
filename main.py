@@ -11,7 +11,7 @@ from urllib.parse import urljoin, urlsplit, urlparse
 
 from parse_tululu_category import search_book_urls
 from get_redirect import check_for_redirect
-from render_website import cards_content
+from render_website import get_cards_content
 
 
 def parse_book_page(response, book_page_url):
@@ -124,8 +124,8 @@ def main():
 
     Path(json_folder).mkdir(parents=True, exist_ok=True)
 
-    with open(f'{json_folder}json_books_content.json', 'w', encoding='UTF-8') as file:
-        json.dump(books_content, file)
+    with open(f'{json_folder}json_books_content.json', 'w', encoding="utf-8") as file:
+        json.dump(books_content, file, ensure_ascii=False)
 
 
 if __name__ == '__main__':
