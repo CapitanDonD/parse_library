@@ -26,7 +26,7 @@
                     <div class="card-body">
                       <h5 class="card-title">{{card_content.book_title}}</h5>
                       <p class="card-text">{{card_content.author_name}}</p>
-                      <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                      <a href="parse_library/books/{{card_content['book_title'] + '.txt'|urlencode}}" target="_blank">Читать</a>
                     </div>
                   </div>
                 </div>
