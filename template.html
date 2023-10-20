@@ -13,9 +13,9 @@
   </head>
   <body>
     <div class="container">
-      {% for chuncked_card_content in chuncked_cards_content %}
+      {% for page in chuncked_pages %}
         <div class="row">
-          {% for card_content in cards_content %}
+          {% for card_content in page %}
             <div class="col-md-6">
               <div class="card mb-3" style="max-width: 540px;">
                 <div class="row no-gutters">

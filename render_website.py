@@ -16,14 +16,9 @@ def get_cards_content():
 
 def on_reload():
     cards_content = get_cards_content()
-    for cards_index, cards in enumerate(cards_content, 1, 2):
-        pprint(cards)
-        page_index_name = 1
-
-        if cards_index > 10:
-            page_index_name+=1
-
-        chuncked_cards_content = list(chunked(cards, 2))
+    pages = list(chunked(cards_content, 10))
+    for page_index, pages in enumerate(pages):
+        chuncked_pages = list(chunked(pages, 2))
 
         env = Environment(
             loader=FileSystemLoader('.')
@@ -31,11 +26,11 @@ def on_reload():
         template = env.get_template('template.html')
 
         rendered_page = template.render(
-            chuncked_cards_content = chuncked_cards_content,
-            cards_content = cards
+            chuncked_pages=chuncked_pages
         )
+        print(rendered_page)
 
-        with open(f'pages/index{page_index_name}.html', 'w', encoding="utf8") as file:
+        with open(f'pages/index{page_index}.html', 'w', encoding="utf8") as file:
             file.write(rendered_page)
 
 
