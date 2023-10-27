@@ -13,17 +13,17 @@
   </head>
   <body>
     <div class="container">
-      <nav aria-label="Page navigation example">
-        <ul class="pagination">
-          <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-          <li class="page-item"><a class="page-link" href="pages/index0.html">1</a></li>
-          <li class="page-item"><a class="page-link" href="pages/index1.html">2</a></li>
-          <li class="page-item"><a class="page-link" href="pages/index2.html">3</a></li>
-          <li class="page-item"><a class="page-link" href="pages/index3.html">4</a></li>
-          <li class="page-item"><a class="page-link" href="pages/index4.html">5</a></li>
-          <li class="page-item"><a class="page-link" href="#">Next</a></li>
-        </ul>
-      </nav>
+<!--      <nav aria-label="Page navigation example">-->
+<!--        <ul class="pagination">-->
+<!--          <li class="page-item"><a class="page-link" href="#">Previous</a></li>-->
+<!--          <li class="page-item"><a class="page-link" href="pages/index0.html">1</a></li>-->
+<!--          <li class="page-item"><a class="page-link" href="pages/index1.html">2</a></li>-->
+<!--          <li class="page-item"><a class="page-link" href="pages/index2.html">3</a></li>-->
+<!--          <li class="page-item"><a class="page-link" href="pages/index3.html">4</a></li>-->
+<!--          <li class="page-item"><a class="page-link" href="pages/index4.html">5</a></li>-->
+<!--          <li class="page-item"><a class="page-link" href="#">Next</a></li>-->
+<!--        </ul>-->
+<!--      </nav>-->
       {% for page in chuncked_pages %}
         <div class="row">
           {% for card_content in page %}
