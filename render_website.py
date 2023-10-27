@@ -26,10 +26,9 @@ def on_reload():
         template = env.get_template('template.html')
 
         rendered_page = template.render(
-            chuncked_pages=chuncked_pages,
-            page_indexes=page_index
+            chuncked_pages=chuncked_pages
+#            page_indexes=page_index
         )
-        print(rendered_page)
 
         with open(f'pages/index{page_index}.html', 'w', encoding="utf8") as file:
             file.write(rendered_page)
