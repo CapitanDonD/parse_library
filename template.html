@@ -1,6 +1,6 @@
 <!doctype html>
 
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
   <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -13,17 +13,28 @@
   </head>
   <body>
     <div class="container">
-<!--      <nav aria-label="Page navigation example">-->
-<!--        <ul class="pagination">-->
-<!--          <li class="page-item"><a class="page-link" href="#">Previous</a></li>-->
-<!--          <li class="page-item"><a class="page-link" href="pages/index0.html">1</a></li>-->
-<!--          <li class="page-item"><a class="page-link" href="pages/index1.html">2</a></li>-->
-<!--          <li class="page-item"><a class="page-link" href="pages/index2.html">3</a></li>-->
-<!--          <li class="page-item"><a class="page-link" href="pages/index3.html">4</a></li>-->
-<!--          <li class="page-item"><a class="page-link" href="pages/index4.html">5</a></li>-->
-<!--          <li class="page-item"><a class="page-link" href="#">Next</a></li>-->
-<!--        </ul>-->
-<!--      </nav>-->
+        <br/>
+          <nav aria-label="Page navigation example">
+            <ul class="pagination">
+              {% if current_page == 1 %}
+                <li class="page-item disabled"><a class="page-link" href="/pages/index{{current_page-1}}.html">Назад</a></li>
+              {% else %}
+                <li class="page-item"><a class="page-link" href="/pages/index{{current_page-1}}.html">Назад</a></li>
+              {% endif %}
+                {% for page_index in range(1, page_indexes) %}
+                  {% if page_index==current_page %}
+                    <li class="page-item active" aria-current="page"><a class="page-link" href="/pages/index{{page_index}}.html">{{page_index}}</a></li>
+                  {% else %}
+                    <li class="page-item"><a class="page-link" href="/pages/index{{page_index}}.html">{{page_index}}</a></li>
+                  {% endif %}
+                {% endfor %}
+              {% if current_page == pages_quantity %}
+                <li class="page-item disabled"><a class="page-link" href="/pages/index{{current_page+1}}.html">Вперёд</a></li>
+              {% else %}
+                <li class="page-item"><a class="page-link" href="/pages/index{{current_page+1}}.html">Вперёд</a></li>
+              {% endif %}
+            </ul>
+          </nav>
       {% for page in chuncked_pages %}
         <div class="row">
           {% for card_content in page %}
@@ -37,6 +48,11 @@
                     <div class="card-body">
                       <h5 class="card-title">{{card_content.book_title}}</h5>
                       <p class="card-text">{{card_content.author_name}}</p>
+                      {% for genre in card_content.genres %}
+                        <span class="badge badge-light">{{genre}}</span>
+                      {% endfor %}
+                      <br>
+                      <br>
                       <a href="parse_library/books/{{card_content['book_title'] + '.txt'|urlencode}}" target="_blank">Читать</a>
                     </div>
                   </div>

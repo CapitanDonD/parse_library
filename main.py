@@ -68,12 +68,12 @@ def main():
 
     arg.add_argument('--start_page', default=1, type=int, help='start downloading from a specific book')
     arg.add_argument('--end_page', default=11, type=int, help='finish on a specific book')
-    arg.add_argument('--dest_folder', default='parse_library', type=str, help='folder which in saves images and texts')
+    arg.add_argument('--dest_folder', default='parse_library_content', type=str, help='folder which in saves images and texts')
     arg.add_argument('--skip_imgs', action='store_true',  help='download images or dont')
     arg.add_argument('--skip_txt', action='store_true', help='download texts or not')
     arg.add_argument(
         '--json_path',
-        default='parse_library',
+        default='parse_library_content',
         help='show path to the json file with results'
     )
 

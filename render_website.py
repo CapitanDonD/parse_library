@@ -5,6 +5,7 @@ from livereload import Server
 from pprint import pprint
 from jinja2 import Environment, FileSystemLoader
 from more_itertools import chunked
+from math import ceil
 
 
 def get_cards_content():
@@ -17,8 +18,9 @@ def get_cards_content():
 def on_reload():
     cards_content = get_cards_content()
     pages = list(chunked(cards_content, 10))
+    all_page_indexes = ceil(int(len(cards_content)/10))
     for page_index, pages in enumerate(pages, 1):
-        chuncked_pages = list(chunked(pages, 2))
+        chuncked_page = list(chunked(pages, 2))
 
         env = Environment(
             loader=FileSystemLoader('.')
@@ -26,8 +28,10 @@ def on_reload():
         template = env.get_template('template.html')
 
         rendered_page = template.render(
-            chuncked_pages=chuncked_pages
-#            page_indexes=page_index
+            chuncked_pages=chuncked_page,
+            page_indexes=all_page_indexes,
+            current_page=page_index,
+            pages_quantity=all_page_indexes
         )
 
         with open(f'pages/index{page_index}.html', 'w', encoding="utf8") as file:
