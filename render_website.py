@@ -2,7 +2,6 @@ import json
 import os
 
 from livereload import Server
-from pprint import pprint
 from jinja2 import Environment, FileSystemLoader
 from more_itertools import chunked
 from math import ceil
