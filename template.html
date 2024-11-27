@@ -23,15 +23,15 @@
               {% endif %}
                 {% for page_index in range(1, page_indexes) %}
                   {% if page_index==current_page %}
-                    <li class="page-item active" aria-current="page"><a class="page-link" href="/pages/index{{page_index}}.html">{{page_index}}</a></li>
+                    <li class="page-item active" aria-current="page"><a class="page-link" href="../pages/index{{page_index}}.html">{{page_index}}</a></li>
                   {% else %}
-                    <li class="page-item"><a class="page-link" href="/pages/index{{page_index}}.html">{{page_index}}</a></li>
+                    <li class="page-item"><a class="page-link" href="../pages/index{{page_index}}.html">{{page_index}}</a></li>
                   {% endif %}
                 {% endfor %}
               {% if current_page == pages_quantity %}
-                <li class="page-item disabled"><a class="page-link" href="/pages/index{{current_page+1}}.html">Вперёд</a></li>
+                <li class="page-item disabled"><a class="page-link" href="../pages/index{{current_page+1}}.html">Вперёд</a></li>
               {% else %}
-                <li class="page-item"><a class="page-link" href="/pages/index{{current_page+1}}.html">Вперёд</a></li>
+                <li class="page-item"><a class="page-link" href="../pages/index{{current_page+1}}.html">Вперёд</a></li>
               {% endif %}
             </ul>
           </nav>
