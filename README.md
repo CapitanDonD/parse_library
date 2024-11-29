@@ -32,8 +32,12 @@ or
 ```
 python main.py --skip_txt
 ```
-
 If you want to specify a different path to download the .json file:
 ```
 python main.py --json_path *folder in which you want*
 ```
+### How to run the programme offline
+Before start it offline, you need to download books it in the step above
+
+All downloaded pages of the site are stored in the folder `/parse_library/pages/`
+Then you just need to double-click on any of the downloaded files to make the site work offline.
