@@ -36,7 +36,13 @@ If you want to specify a different path to download the .json file:
 ```
 python main.py --json_path *folder in which you want*
 ```
-### How to run the programme offline
+### How to run site with books
+To run the site with all books,  
+```
+python render_website.py
+```
+
+### How to run the site offline
 Before start it offline, you need to download books it in the step above
 
 All downloaded pages of the site are stored in the folder `/parse_library/pages/`
