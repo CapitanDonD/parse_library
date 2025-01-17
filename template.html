@@ -53,7 +53,7 @@
                       {% endfor %}
                       <br>
                       <br>
-                      <a href="parse_library/books/{{card_content['book_title'] + '.txt'|urlencode}}" target="_blank">Читать</a>
+                      <a href="../parse_library_content/books/{{(card_content['book_title']).replace(':', '') + '.txt'|urlencode}}" target="_blank">Читать</a>
                     </div>
                   </div>
                 </div>
