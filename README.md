@@ -1,6 +1,7 @@
 # Parse library
 This programme is created for download books from the library.
-
+### Online pages on git hub
+https://capitandond.github.io/parse_library/pages/index1.html - url for main page of the site
 ### How to install
 Python3 should be already installed.
 Then use `pip` (or `pip3`, if there is a conflict with Python2) to install dependencies:
@@ -37,7 +38,7 @@ If you want to specify a different path to download the .json file:
 python main.py --json_path *folder in which you want*
 ```
 ### How to run site with books
-To run the site with all books,  
+To run the site with all books, write in cmd
 ```
 python render_website.py
 ```
