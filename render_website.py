@@ -8,7 +8,7 @@ from math import ceil
 
 
 def get_cards_content():
-    with open("parse_library_content/json_books_content.json", "r", encoding="utf-8") as file:
+    with open("media/json_books_content.json", "r", encoding="utf-8") as file:
         books_content = json.load(file)
 
     return books_content
@@ -17,7 +17,7 @@ def get_cards_content():
 def on_reload():
     cards_content = get_cards_content()
     pages = list(chunked(cards_content, 10))
-    all_page_indexes = ceil(int(len(cards_content)/10))
+    all_page_indexes = len(pages)
     for page_index, pages in enumerate(pages, 1):
         chuncked_page = list(chunked(pages, 2))
 
