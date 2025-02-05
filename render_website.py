@@ -16,10 +16,12 @@ def get_cards_content():
 
 def on_reload():
     cards_content = get_cards_content()
-    pages = list(chunked(cards_content, 10))
+    nuber_of_book_on_page = 10
+    pages = list(chunked(cards_content, nuber_of_book_on_page))
     all_page_indexes = len(pages)
+    number_of_columns = 2
     for page_index, pages in enumerate(pages, 1):
-        chuncked_page = list(chunked(pages, 2))
+        chuncked_page = list(chunked(pages, number_of_columns))
 
         env = Environment(
             loader=FileSystemLoader('.')
