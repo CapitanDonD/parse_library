@@ -9,7 +9,7 @@ import argparse
 
 
 def get_cards_content(media_path):
-    with open(f"{media_path}", "r", encoding="utf-8") as file:
+    with open(f'{media_path}', 'r', encoding='utf-8') as file:
         books_content = json.load(file)
 
     return books_content
