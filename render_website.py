@@ -5,17 +5,24 @@ from livereload import Server
 from jinja2 import Environment, FileSystemLoader
 from more_itertools import chunked
 from math import ceil
+import argparse
 
 
-def get_cards_content():
-    with open("media/json_books_content.json", "r", encoding="utf-8") as file:
+def get_cards_content(media_path):
+    with open(f"{media_path}", "r", encoding="utf-8") as file:
         books_content = json.load(file)
 
     return books_content
 
 
 def on_reload():
-    cards_content = get_cards_content()
+    arg = argparse.ArgumentParser(
+        description=' To start downloading from a specific book add argument --start_page, to finish on a specific book\
+                 add argument --end_page'
+    )
+    arg.add_argument('--dest_path', default='media/json_books_content.json', type=str, help='path and name of file, like that: "maedia/json_books_content.json" which in saves images and texts')
+    args = arg.parse_args()
+    cards_content = get_cards_content(args.dest_path)
     nuber_of_book_on_page = 10
     pages = list(chunked(cards_content, nuber_of_book_on_page))
     all_page_indexes = len(pages)
