@@ -7,7 +7,6 @@ from more_itertools import chunked
 from math import ceil
 import argparse
 
-
 def get_cards_content(media_path):
     with open(f'{media_path}', 'r', encoding='utf-8') as file:
         books_content = json.load(file)
@@ -16,6 +15,7 @@ def get_cards_content(media_path):
 
 
 def on_reload():
+
     arg = argparse.ArgumentParser(
         description=' To start downloading from a specific book add argument --start_page, to finish on a specific book\
                  add argument --end_page'
