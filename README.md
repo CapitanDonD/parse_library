@@ -1,6 +1,6 @@
 # Parse library
 This programme is created for download books from the library.\
-after launching the code go to ```*your path to project*/parse_library/pages/index1.html```
+after launching the code go to [this link](http://127.0.0.1:5500), it doesnt need internet
 ### Online pages on git hub
 https://capitandond.github.io/parse_library/pages/index1.html - url for main page of the site
 ### How to install
