@@ -15,7 +15,6 @@ def get_cards_content(media_path):
 
 
 def on_reload():
-
     arg = argparse.ArgumentParser(
         description=' To start downloading from a specific book add argument --start_page, to finish on a specific book\
                  add argument --end_page'
@@ -27,6 +26,7 @@ def on_reload():
     pages = list(chunked(cards_content, nuber_of_book_on_page))
     all_page_indexes = len(pages)
     number_of_columns = 2
+
     for page_index, pages in enumerate(pages, 1):
         chuncked_page = list(chunked(pages, number_of_columns))
 
@@ -42,7 +42,7 @@ def on_reload():
             pages_quantity=all_page_indexes
         )
 
-        with open(f'pages/index{page_index}.html', 'w', encoding="utf8") as file:
+        with open(f'pages/index{page_index}.html', 'w', encoding='utf8') as file:
             file.write(rendered_page)
 
 
